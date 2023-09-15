@@ -9,6 +9,7 @@ const Nav = () => {
   const isUserLoggedIn = true;
 
   const [providers, setProviders] = useState(null);
+  const [toggleDropdown, settoggleDropdown] = useState(false);
 
   useEffect(() => {
     const setProviders = async () => {
@@ -58,19 +59,49 @@ const Nav = () => {
       </div>
 
       {/* Mobile Navigation */}
-      <div className="sm:hidden flex relative">
+      <div className='sm:hidden flex relative'>
         {isUserLoggedIn ? (
           <div className='flex'>
             <Image
-                src="assets/images/logo.svg"
-                width={37}
-                height={37}
-                className='rounded-full'
-                alt="profile"
-                onClick={() => {}}
+              src='assets/images/logo.svg'
+              width={37}
+              height={37}
+              className='rounded-full'
+              alt='profile'
+              // reversing state of toggle to flip it on click
+              onClick={() => settoggleDropdown((prev) => !prev)}
             />
+
+            {toggleDropdown && (
+              <div className='dropdown'>
+                <Link
+                  href='/profile'
+                  className='dropdown_link'
+                  onClick={() => settoggleDropdown(false)}
+                >
+                  My Profile
+                </Link>
+                <Link
+                  href='/create-prompt'
+                  className='dropdown_link'
+                  onClick={() => settoggleDropdown(false)}
+                >
+                  Create Prompt
+                </Link>
+                <button
+                  type='button'
+                  onClick={() => {
+                    settoggleDropdown(false);
+                    signOut();
+                  }}
+                  className='mt-5 w-full black_btn'
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
           </div>
-        ): (
+        ) : (
           <>
             {providers &&
               Object.values(providers).map((provider) => (
@@ -86,7 +117,6 @@ const Nav = () => {
           </>
         )}
       </div>
-
     </nav>
   );
 };
